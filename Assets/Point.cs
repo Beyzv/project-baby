@@ -27,9 +27,14 @@ public class Point : MonoBehaviour
     private void Start()
     {
         pointObject = gameObject;
-        pointAnimator = pointObject.GetComponent<Animator>();
-        audioSource = pointObject.GetComponent<AudioSource>();
-        refPoint = transform.Find("RefPoint");
+
+        if(type != PointType.movePoint)
+        {
+            pointAnimator = pointObject.GetComponent<Animator>();
+            audioSource = pointObject.GetComponent<AudioSource>();
+            refPoint = transform.Find("RefPoint");
+        }
+       
         
     }
     public void TriggerAttack()

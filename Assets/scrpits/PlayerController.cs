@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
         speed = 0;
         yield return new WaitForSeconds(1f);
         fixablePoint.ResetObject();
-        speed = 12;
+        speed = 20;
     }
     public void MovePlayer()
     {
