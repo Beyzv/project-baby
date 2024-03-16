@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public AudioSource audioSource;
 
+
+    private Point fixablePoint = null;
+
     [Serializable]
     public struct MaterialFootstepPair
     {
@@ -32,11 +35,37 @@ public class PlayerController : MonoBehaviour
     {
         MovePlayer();
     }
-
+    private void Update()
+    {
+        if(fixablePoint != null)
+        {
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.Log("fixing");
+            }
+        }
+    }
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         lastStepTime = Time.time;
+    }
+
+
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("DropItem"))
+        {
+            fixablePoint = other.gameObject.GetComponent<Point>();
+        }
+    }
+
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("Fixed");
+        fixablePoint = null;
     }
 
     public void MovePlayer()
