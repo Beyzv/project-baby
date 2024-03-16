@@ -56,6 +56,7 @@ public class BabyController : MonoBehaviour
     {
         performing = true;
         babyAnimator.SetTrigger("Attack");
+        current_point.TriggerAttack();
         yield return new WaitForSeconds(1);
         SelectPoint();
         performing = false;
