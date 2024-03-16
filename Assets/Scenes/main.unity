@@ -2846,7 +2846,7 @@ Animator:
   m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &279906813 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: eac4431bf52e99844bb3e7f8eb8c4dbe, type: 3}
+  m_CorrespondingSourceObject: {fileID: -9044896593469587049, guid: eac4431bf52e99844bb3e7f8eb8c4dbe, type: 3}
   m_PrefabInstance: {fileID: 491466233}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &284413050
