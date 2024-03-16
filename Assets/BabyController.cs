@@ -15,8 +15,8 @@ public class BabyController : MonoBehaviour
     bool performing = false;
 
     //eþya zararý içim
-    public furnitureHealth furnitureHealth;
-    // Start is called before the first frame update
+  //  public furnitureHealth furnitureHealth;
+   
     void Start()
     {
         baby = GetComponent<NavMeshAgent>();
@@ -62,7 +62,7 @@ public class BabyController : MonoBehaviour
         yield return new WaitForSeconds(1);
         SelectPoint();
         performing = false;
-        furnitureHealth.TakeDamage(10);
+     //   furnitureHealth.TakeDamage(10);
     }
 
 
