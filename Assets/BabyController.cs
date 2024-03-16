@@ -36,21 +36,18 @@ public class BabyController : MonoBehaviour
         }
 
 
-        if(Vector3.Distance(baby.transform.position,current_point.transform.position) < 1f && !performing)
+        if (baby.remainingDistance <= baby.stoppingDistance && !performing)
         {
-            if(current_point.type == Point.PointType.attackPoint)
+            if (current_point.type == Point.PointType.attackPoint)
             {
                 StartCoroutine(Attack());
-                Debug.Log("attacked selected");
+                
             }
             else
             {
                 SelectPoint();
-                Debug.Log("point selected");
+                
             }
-
-
-            
         }
 
     }
@@ -59,7 +56,7 @@ public class BabyController : MonoBehaviour
     {
         performing = true;
         babyAnimator.SetTrigger("Attack");
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         SelectPoint();
         performing = false;
     }
