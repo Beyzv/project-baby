@@ -6,9 +6,14 @@ public class Point : MonoBehaviour
 {
     private Animator pointAnimator;
     private AudioSource audioSource;
+    private GameObject pointObject;
+
+    public Transform refPoint;
+
 
     public AudioClip attackSFX;
-    public GameObject pointObject;
+    public bool dropped = false;
+
    public enum PointType { 
         movePoint,
         attackPoint,
@@ -21,12 +26,16 @@ public class Point : MonoBehaviour
 
     private void Start()
     {
+        pointObject = gameObject;
         pointAnimator = pointObject.GetComponent<Animator>();
         audioSource = pointObject.GetComponent<AudioSource>();
+        refPoint = transform.Find("RefPoint");
+        
     }
     public void TriggerAttack()
     {
         pointAnimator.SetBool("Dropped", true);
+        dropped = true;
         audioSource.PlayOneShot(attackSFX);
 
     }
@@ -34,5 +43,6 @@ public class Point : MonoBehaviour
     public void ResetObject()
     {
         pointAnimator.SetBool("Dropped", false);
+        dropped = false;
     }
 }

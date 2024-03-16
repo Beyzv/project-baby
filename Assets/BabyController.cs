@@ -8,7 +8,6 @@ public class BabyController : MonoBehaviour
     private NavMeshAgent baby;
     private Animator babyAnimator;
 
-    public Point[] points;
 
     Point current_point;
 
@@ -68,8 +67,8 @@ public class BabyController : MonoBehaviour
 
     void SelectPoint()
     {
-
-            current_point = points[Random.Range(0, points.Length)];
-            baby.SetDestination(current_point.transform.position);
+            
+            current_point = GameManager.instance.points[Random.Range(0, GameManager.instance.points.Length)];
+            baby.SetDestination(current_point.refPoint.position);
     }
 }

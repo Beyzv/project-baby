@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public AudioSource audioSource;
 
+    public AudioClip catFixClip;
 
-    private Point fixablePoint = null;
+
+    public Point fixablePoint = null;
 
     [Serializable]
     public struct MaterialFootstepPair
@@ -37,12 +40,17 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        if(fixablePoint != null)
+        if(fixablePoint != null && fixablePoint.dropped)
         {
-            if(Input.GetKeyDown(KeyCode.E))
+            GameManager.instance.uIText.gameObject.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                Debug.Log("fixing");
+                FixObject();
             }
+        }
+        else
+        {
+            GameManager.instance.uIText.gameObject.SetActive(false);
         }
     }
     private void Awake()
@@ -53,9 +61,10 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("DropItem"))
+
+        if (other.gameObject.CompareTag("DropItem"))
         {
             fixablePoint = other.gameObject.GetComponent<Point>();
         }
@@ -64,10 +73,29 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("Fixed");
-        fixablePoint = null;
+        if (other.gameObject.CompareTag("DropItem"))
+        {
+            fixablePoint = null;
+        }
     }
 
+
+    void FixObject()
+    {
+        StartCoroutine(Fix());
+
+    }
+
+    IEnumerator Fix()
+    {
+        animator.SetFloat("Speed", 0f);
+        animator.SetTrigger("Fix");
+        audioSource.PlayOneShot(catFixClip);
+        speed = 0;
+        yield return new WaitForSeconds(1f);
+        fixablePoint.ResetObject();
+        speed = 12;
+    }
     public void MovePlayer()
     {
         Vector3 movement = new Vector3(movementData.x, 0f, movementData.y).normalized * speed;

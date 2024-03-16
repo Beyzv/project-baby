@@ -2,12 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
 
     private float respawnDelay = 1.4f;
     private bool isGameEnd;
+    public static GameManager instance;
+
+    public TextMeshProUGUI uIText;
+
+
+    public Point[] points;
+
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); 
+        }
+    }
     public void CompliteLevel()
     {
 
