@@ -14,7 +14,8 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioSource;
 
     public AudioClip catFixClip;
-
+ 
+  
 
     public Point fixablePoint = null;
 
@@ -42,15 +43,17 @@ public class PlayerController : MonoBehaviour
     {
         if(fixablePoint != null && fixablePoint.dropped)
         {
-            GameManager.instance.uIText.gameObject.SetActive(true);
+            GameManager.instance.fixButton.gameObject.SetActive(true);
+
             if (Input.GetKeyDown(KeyCode.E))
             {
                 FixObject();
             }
+            
         }
         else
         {
-            GameManager.instance.uIText.gameObject.SetActive(false);
+            GameManager.instance.fixButton.gameObject.SetActive(false);
         }
     }
     private void Awake()
@@ -79,11 +82,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    void FixObject()
+ 
+    public void FixObject()
     {
         StartCoroutine(Fix());
-
+        Score.scoreValue += 30;
     }
 
     IEnumerator Fix()
