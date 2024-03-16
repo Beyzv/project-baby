@@ -13,14 +13,11 @@ public class BabyController : MonoBehaviour
 
     bool performing = false;
 
-    //eþya zararý içim
-  //  public furnitureHealth furnitureHealth;
    
     void Start()
     {
         baby = GetComponent<NavMeshAgent>();
         babyAnimator = GetComponent<Animator>();
-
         SelectPoint();
     }
 
@@ -37,12 +34,16 @@ public class BabyController : MonoBehaviour
         }
 
 
-        if (baby.remainingDistance <= baby.stoppingDistance && !performing)
+        if (baby.remainingDistance <= baby.stoppingDistance && !performing && !baby.pathPending)
         {
             if (current_point.type == Point.PointType.attackPoint)
             {
                 StartCoroutine(Attack());
                 
+            }
+            else if(current_point.type == Point.PointType.movePoint)
+            {
+                StartCoroutine(Wait());
             }
             else
             {
@@ -53,22 +54,40 @@ public class BabyController : MonoBehaviour
 
     }
 
+
+    IEnumerator Wait()
+    {
+        performing = true;
+        yield return new WaitForSeconds(2);
+        SelectPoint();
+        performing = false;
+    }
+
     IEnumerator Attack()
     {
+        Debug.Log("SALDIRDIM");
         performing = true;
         babyAnimator.SetTrigger("Attack");
         current_point.TriggerAttack();
         yield return new WaitForSeconds(1);
         SelectPoint();
         performing = false;
-     //   furnitureHealth.TakeDamage(10);
     }
 
 
     void SelectPoint()
     {
             
-            current_point = GameManager.instance.points[Random.Range(0, GameManager.instance.points.Length)];
+        current_point = GameManager.instance.points[Random.Range(0, GameManager.instance.points.Length)];
+
+        if(current_point.type != Point.PointType.attackPoint)
+        {
+            baby.SetDestination(current_point.transform.position);
+        }
+        else
+        {
             baby.SetDestination(current_point.refPoint.position);
+        }
+            
     }
 }
