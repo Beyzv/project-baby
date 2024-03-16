@@ -39,7 +39,7 @@ public class BabyController : MonoBehaviour
 
         if (baby.remainingDistance <= baby.stoppingDistance && !performing)
         {
-            if (current_point.type == Point.PointType.attackPoint)
+            /*if (current_point.type == Point.PointType.attackPoint)
             {
                 StartCoroutine(Attack());
                 
@@ -48,7 +48,7 @@ public class BabyController : MonoBehaviour
             {
                 SelectPoint();
                 
-            }
+            }*/
         }
 
     }
