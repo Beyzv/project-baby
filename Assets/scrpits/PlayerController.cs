@@ -7,15 +7,13 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public float stepInterval = 1f;
-    private float lastStepTime; 
+    private float lastStepTime;
     private Vector2 movementData;
     public Rigidbody rb;
     public Animator animator;
     public AudioSource audioSource;
 
     public AudioClip catFixClip;
- 
-  
 
     public Point fixablePoint = null;
 
@@ -27,8 +25,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public MaterialFootstepPair[] materialFootstepPairs;
-    public LayerMask raycastLayerMask; 
-    public GameObject groundCheck; 
+    public LayerMask raycastLayerMask;
+    public GameObject groundCheck;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -39,9 +37,10 @@ public class PlayerController : MonoBehaviour
     {
         MovePlayer();
     }
+
     private void Update()
     {
-        if(fixablePoint != null && fixablePoint.dropped)
+        if (fixablePoint != null && fixablePoint.dropped)
         {
             GameManager.instance.fixButton.gameObject.SetActive(true);
 
@@ -56,23 +55,20 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.fixButton.gameObject.SetActive(false);
         }
     }
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         lastStepTime = Time.time;
     }
 
-
-
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.gameObject.CompareTag("DropItem"))
         {
             fixablePoint = other.gameObject.GetComponent<Point>();
         }
     }
-
 
     private void OnTriggerExit(Collider other)
     {
@@ -99,22 +95,19 @@ public class PlayerController : MonoBehaviour
         fixablePoint.ResetObject();
         speed = 20;
     }
+
     public void MovePlayer()
     {
         Vector3 movement = new Vector3(movementData.x, 0f, movementData.y).normalized * speed;
         rb.velocity = movement;
 
-
         animator.SetFloat("Speed", movement.magnitude);
-
 
         if (movement != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
             Quaternion newRotation = Quaternion.Slerp(rb.rotation, targetRotation, 15 * Time.fixedDeltaTime);
             rb.MoveRotation(newRotation);
-        
-
 
             RaycastHit hit;
             if (Physics.Raycast(groundCheck.transform.position, Vector3.down, out hit, Mathf.Infinity, raycastLayerMask))
@@ -122,7 +115,6 @@ public class PlayerController : MonoBehaviour
                 PhysicMaterial hitMaterial = hit.collider.sharedMaterial;
                 if (hitMaterial != null)
                 {
-                
                     foreach (var pair in materialFootstepPairs)
                     {
                         if (pair.material == hitMaterial)
@@ -135,9 +127,17 @@ public class PlayerController : MonoBehaviour
                             }
                         }
                     }
-
                 }
             }
         }
+    }
+    public void ResetSpeed()
+    {
+        speed = 20;
+    }
+
+    public void IncreaseSpeed(float multiplier)
+    {
+        speed *= multiplier;
     }
 }
