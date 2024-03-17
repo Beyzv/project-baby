@@ -14,6 +14,8 @@ public class Point : MonoBehaviour
     public AudioClip attackSFX;
     public bool dropped = false;
 
+    public GameObject[] dropObjects;
+
    public enum PointType { 
         movePoint,
         attackPoint,
@@ -24,7 +26,7 @@ public class Point : MonoBehaviour
     public PointType type;
 
 
-    private void Start()
+    private void Awake()
     {
         pointObject = gameObject;
 
@@ -43,11 +45,27 @@ public class Point : MonoBehaviour
         dropped = true;
         audioSource.PlayOneShot(attackSFX);
 
+        if(dropObjects.Length > 0)
+        {
+            foreach(GameObject go in dropObjects)
+            {
+                go.SetActive(true);
+            }
+        }
+
     }
 
     public void ResetObject()
     {
         pointAnimator.SetBool("Dropped", false);
         dropped = false;
+
+        if (dropObjects.Length > 0)
+        {
+            foreach (GameObject go in dropObjects)
+            {
+                go.SetActive(false);
+            }
+        }
     }
 }

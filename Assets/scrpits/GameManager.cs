@@ -9,27 +9,23 @@ public class GameManager : MonoBehaviour
 {
 
     private float respawnDelay = 1.4f;
-    private bool isGameEnd;
-    public static GameManager instance;
+    public bool isGameEnd;
 
     public TextMeshProUGUI uIText;
+    public TextMeshProUGUI scoreText;
     public Button fixButton;
 
 
+    public GameObject endScreen;
+
     public Point[] points;
+
+    public AudioClip doorOpen;
 
 
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject); 
-        }
+        AudioListener.volume = 1f;
     }
     public void CompliteLevel()
     {
@@ -45,6 +41,29 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+
+    public void ShowEndScreen()
+    {
+        isGameEnd = true;
+        this.GetComponent<AudioSource>().PlayOneShot(doorOpen);
+        scoreText.text = Score.scoreValue.ToString();
+        endScreen.SetActive(true);
+        AudioListener.volume = 0f;
+    }
+
+    public void Restart()
+    {
+        Score.scoreValue = 0;
+        AudioListener.volume = 1f;
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void MainMenu()
+    {
+        AudioListener.volume = 1f;
+        SceneManager.LoadSceneAsync(0);
     }
     public void LevelUp()
     {
