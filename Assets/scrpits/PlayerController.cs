@@ -13,9 +13,16 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public AudioSource audioSource;
 
+
+    public GameManager gm;
+
     public AudioClip catFixClip;
 
     public Point fixablePoint = null;
+
+    public bool boosted;
+
+    public GameObject boostParticles;
 
     [Serializable]
     public struct MaterialFootstepPair
@@ -42,7 +49,7 @@ public class PlayerController : MonoBehaviour
     {
         if (fixablePoint != null && fixablePoint.dropped)
         {
-            GameManager.instance.fixButton.gameObject.SetActive(true);
+            gm.fixButton.gameObject.SetActive(true);
 
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -52,7 +59,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            GameManager.instance.fixButton.gameObject.SetActive(false);
+            gm.fixButton.gameObject.SetActive(false);
         }
     }
 
@@ -91,8 +98,11 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Fix");
         audioSource.PlayOneShot(catFixClip);
         speed = 0;
-        yield return new WaitForSeconds(1f);
+        GetComponent<CapsuleCollider>().enabled = false;
+        yield return new WaitForSeconds(1.5f);
         fixablePoint.ResetObject();
+        yield return new WaitForSeconds(1f);
+        GetComponent<CapsuleCollider>().enabled = true;
         speed = 20;
     }
 
@@ -108,6 +118,7 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
             Quaternion newRotation = Quaternion.Slerp(rb.rotation, targetRotation, 15 * Time.fixedDeltaTime);
             rb.MoveRotation(newRotation);
+
 
             RaycastHit hit;
             if (Physics.Raycast(groundCheck.transform.position, Vector3.down, out hit, Mathf.Infinity, raycastLayerMask))
@@ -134,10 +145,22 @@ public class PlayerController : MonoBehaviour
     public void ResetSpeed()
     {
         speed = 20;
+        boosted = false;
+        boostParticles.SetActive(false);
     }
 
-    public void IncreaseSpeed(float multiplier)
+    public void IncreaseSpeed(float boostSpeed)
     {
-        speed *= multiplier;
+        speed = boostSpeed;
+        boosted = true;
+        boostParticles.SetActive(true);
+        StartCoroutine(SpeedTimer());
+    }
+
+
+    IEnumerator SpeedTimer()
+    {
+        yield return new WaitForSeconds(5);
+        ResetSpeed();
     }
 }

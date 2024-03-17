@@ -9,6 +9,8 @@ public class BabyController : MonoBehaviour
     private Animator babyAnimator;
 
 
+    public GameManager gm;
+
     Point current_point;
 
     bool performing = false;
@@ -65,7 +67,7 @@ public class BabyController : MonoBehaviour
 
     IEnumerator Attack()
     {
-        Debug.Log("SALDIRDIM");
+
         performing = true;
         babyAnimator.SetTrigger("Attack");
         current_point.TriggerAttack();
@@ -78,7 +80,7 @@ public class BabyController : MonoBehaviour
     void SelectPoint()
     {
             
-        current_point = GameManager.instance.points[Random.Range(0, GameManager.instance.points.Length)];
+        current_point = gm.points[Random.Range(0, gm.points.Length)];
 
         if(current_point.type != Point.PointType.attackPoint)
         {

@@ -3,29 +3,19 @@ using System.Collections;
 
 public class SpeedBoosterTrigger : MonoBehaviour
 {
-    public float speedMultiplier = 2f; // Hýzýn kaç kat artýrýlacaðýný belirler
-    public float duration = 5f; // Hýz arttýrýcýnýn etkili olacaðý süre
+    public float boostSpeed = 2f; // Hýzýn kaç kat artýrýlacaðýný belirler
 
-    private bool isTriggered = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !isTriggered) 
+        if (other.CompareTag("Player")) 
         {
             PlayerController playerController = other.GetComponent<PlayerController>(); 
-            if (playerController != null)
+            if (playerController != null && !playerController.boosted)
             {
-                playerController.IncreaseSpeed(speedMultiplier); 
-                isTriggered = true;
-                StartCoroutine(DisableSpeedBoost(playerController)); 
+                playerController.IncreaseSpeed(boostSpeed);
+                Destroy(gameObject);
             }
         }
-    }
-
-    IEnumerator DisableSpeedBoost(PlayerController playerController)
-    {
-        yield return new WaitForSeconds(duration); 
-        playerController.ResetSpeed();  
-        Destroy(gameObject); 
     }
 }

@@ -10,17 +10,31 @@ public class Timer : MonoBehaviour
     [SerializeField]
     float remainigTime;
 
+    public AudioSource hurryAus;
+    public AudioSource slowAus;
+
     public GameManager gameManager;
+
+    public AudioClip fastSoundtrack;
     void Update()
     {
+        
         if (remainigTime > 0)
         {
             remainigTime -= Time.deltaTime;
+            if (remainigTime < 60 && !hurryAus.isPlaying)
+            {
+                slowAus.Stop();
+                hurryAus.Play();
+                timerText.color = Color.red;
+                timerText.transform.GetComponent<Animator>().SetTrigger("Hurry");
+            }
+            
         }
-        else if (remainigTime < 0)
+        else if (remainigTime < 0 && !gameManager.isGameEnd)
         {
             remainigTime = 0;
-            gameManager.LevelUp();
+            gameManager.ShowEndScreen();
         }
 
         int minutes = Mathf.FloorToInt(remainigTime / 60);
